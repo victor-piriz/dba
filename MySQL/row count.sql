@@ -3,7 +3,7 @@ SELECT
 FROM
     information_schema.tables
 WHERE
-    table_name="merchant_payment_method_fee_override"
+    table_name=""
 AND
-    table_schema="directopago";
+    table_schema="";
 
