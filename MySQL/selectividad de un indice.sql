@@ -15,8 +15,8 @@ WHERE
     t.table_schema = s.table_schema
         AND t.table_name = s.table_name AND t.table_rows != 0
         AND t.table_schema NOT IN ( 'mysql','performance_schema','information_schema','sys')
-        -- AND t.table_name='multicurrency_merchants_transaction' -- PARA TABLA ESPECIFICA
-        -- AND t.table_schema = 'astropay'                        -- PARA DB ESPECIFICA
+        -- AND t.table_name='table'     -- PARA TABLA ESPECIFICA
+        -- AND t.table_schema = 'db'    -- PARA DB ESPECIFICA
         and index_name!='PRIMARY'
         and CARDINALITY/TABLE_ROWS <=0.2
 ORDER BY SELECTIVITY;
