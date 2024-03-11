@@ -1,4 +1,4 @@
-mysql -h eu1-payments-live-jpm-slave.cde2qxpfacrq.eu-west-1.rds.amazonaws.com -uvpiriz -p --batch -e"
+mysql -h<endpoint> -u<user> -p --batch -e"
 select index_schema AS DB_NAME,
    table_name AS TBL_NAME,
    index_name AS INDEX_NAME,
@@ -14,4 +14,4 @@ group by index_schema,
  non_unique,
  table_name
 order by index_schema,
- index_name;" > jpm_replica.sql
+ index_name;" > index_file.sql
