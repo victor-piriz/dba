@@ -5,9 +5,9 @@
 -- ----------------------------------
 -- (1) EXPORTING INFO TO FILES
 -- ----------------------------------
-SET @ENVIRONMENT='DMS';                     -- 1    eu1-payments-live-dlmaindb-dms-po.cde2qxpfacrq.eu-west-1.rds.amazonaws.com
--- SET @ENVIRONMENT='REPLICA2';             -- 2    eu1-payments-live-dlmaindb-rep.cde2qxpfacrq.eu-west-1.rds.amazonaws.com
--- SET @ENVIRONMENT='REPLICA_BI';           -- 3    eu1-payments-live-dlmaindb-rep-bi.cde2qxpfacrq.eu-west-1.rds.amazonaws.com
+SET @ENVIRONMENT='DMS';                     -- 1   
+-- SET @ENVIRONMENT='REPLICA2';             -- 2    
+-- SET @ENVIRONMENT='REPLICA_BI';           -- 3    
 
 
 ### this is script.sql ###
@@ -37,14 +37,14 @@ GROUP BY table_schema,table_name, index_type, index_name
 ORDER BY table_schema,table_name,index_name;
 ### this is script.sql ###
 
-mkdir /home/astropay/dumps/gdesouza/activities/20230303_COMPARING_INDEXES_DLDB
-cd /home/astropay/dumps/gdesouza/activities/20230303_COMPARING_INDEXES_DLDB
+mkdir /home/astropay/dumps/activities/20230303_COMPARING_INDEXES_DLDB
+cd /home/astropay/dumps/activities/20230303_COMPARING_INDEXES_DLDB
 vim script.sql 
 
 export MYSQL_PWD=''
-mysql -u gdesouza -h eu1-payments-live-dlmaindb-dms-po.cde2qxpfacrq.eu-west-1.rds.amazonaws.com -s -p'' < script.sql > DMS.txt
-mysql -u gdesouza -h eu1-payments-live-dlmaindb-rep.cde2qxpfacrq.eu-west-1.rds.amazonaws.com -s -p'' < script.sql > REPLICA2.txt
-mysql -u gdesouza -h eu1-payments-live-dlmaindb-rep-bi.cde2qxpfacrq.eu-west-1.rds.amazonaws.com -s < script.sql > REPLICA_BI.txt
+mysql -h<endpoint> -u<user> -p -s < script.sql > DMS.txt
+mysql -h<endpoint> -u<user> -p -s < script.sql > REPLICA2.txt
+mysql -h<endpoint> -u<user> -p -s < script.sql > REPLICA_BI.txt
 
 
 
@@ -79,9 +79,9 @@ CREATE TABLE env_table_index (
 -- (4) LOADING WORK TABLE
 -- ----------------------------------
 
-LOAD DATA LOCAL INFILE '/home/astropay/dumps/gdesouza/activities/20230303_COMPARING_INDEXES_DLDB/DMS.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
-LOAD DATA LOCAL INFILE '/home/astropay/dumps/gdesouza/activities/20230303_COMPARING_INDEXES_DLDB/REPLICA2.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
-LOAD DATA LOCAL INFILE '/home/astropay/dumps/gdesouza/activities/20230303_COMPARING_INDEXES_DLDB/REPLICA_BI.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
+LOAD DATA LOCAL INFILE '/home/astropay/dumps/activities/20230303_COMPARING_INDEXES_DLDB/DMS.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
+LOAD DATA LOCAL INFILE '/home/astropay/dumps/activities/20230303_COMPARING_INDEXES_DLDB/REPLICA2.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
+LOAD DATA LOCAL INFILE '/home/astropay/dumps/activities/20230303_COMPARING_INDEXES_DLDB/REPLICA_BI.txt' INTO TABLE 20230303_indexes_dldb.env_table_index FIELDS TERMINATED BY '||';
 
 -- ----------------------------------
 -- (5) MAGIC - EXECUTE with MySQL Client -e
