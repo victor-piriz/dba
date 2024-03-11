@@ -1,0 +1,3 @@
+alter table TBL_name , ALGORITHM=INPLACE, LOCK=NONE;
+
+alter table TBL_name , ALGORITHM=INPLACE, LOCK=NONE;

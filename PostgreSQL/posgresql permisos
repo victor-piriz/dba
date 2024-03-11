@@ -1,0 +1,20 @@
+Create a read-only user in PostgreSQL
+1. To create a new user in PostgreSQL:
+CREATE USER username WITH PASSWORD 'your_password';
+
+2. GRANT the CONNECT access:
+GRANT CONNECT ON DATABASE database_name TO username;
+
+3. Then GRANT USAGE on schema:
+GRANT USAGE ON SCHEMA schema_name TO username;
+
+4. GRANT SELECT
+Grant SELECT for a specific table:
+GRANT SELECT ON table_name TO username;
+
+Grant SELECT for multiple tables:
+GRANT SELECT ON ALL TABLES IN SCHEMA schema_name TO username;
+
+If you want to grant access to the new table in the future automatically, you have to alter default:
+ALTER DEFAULT PRIVILEGES IN SCHEMA schema_name
+GRANT SELECT ON TABLES TO username;

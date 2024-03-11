@@ -1,0 +1,13 @@
+SELECT
+  TABLE_NAME AS `Tabla`,
+  ROUND((DATA_LENGTH) / 1024 / 1024 / 1024) AS `DATA (MB)`,
+  ROUND((INDEX_LENGTH) / 1024 / 1024 / 1024) AS `INDEX (MB)`,
+  ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024 / 1024) AS `TOTAL (MB)`
+FROM
+  information_schema.TABLES
+WHERE
+  TABLE_SCHEMA = "cip"
+  AND TABLE_NAME in ('payment_cip_file', 'payment_info')
+ORDER BY
+  (DATA_LENGTH + INDEX_LENGTH)
+DESC;

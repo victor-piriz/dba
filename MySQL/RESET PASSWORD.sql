@@ -1,0 +1,4 @@
+## RESET PASSWORD
+
+SET PASSWORD FOR 'user'@'%' = 'password';
+FLUSH PRIVILEGES;

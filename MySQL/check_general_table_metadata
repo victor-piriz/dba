@@ -1,0 +1,39 @@
+-- --------------------------
+-- GENERAL TABLE METADATA
+-- --------------------------
+SELECT
+    alfa.*,
+    CASE
+        WHEN COUNT(tr.TRIGGER_NAME) = 0 THEN "0"
+        ELSE CONCAT(COUNT(tr.TRIGGER_NAME), ' (',
+            SUM(case when tr.EVENT_MANIPULATION = 'SELECT' THEN 1 ELSE 0 END),'/',
+            SUM(case when tr.EVENT_MANIPULATION = 'INSERT' THEN 1 ELSE 0 END),'/',
+            SUM(case when tr.EVENT_MANIPULATION = 'UPDATE' THEN 1 ELSE 0 END),'/',
+            SUM(case when tr.EVENT_MANIPULATION = 'DELETE' THEN 1 ELSE 0 END),
+            ')')
+    END AS "TRIGGERS (S/I/U/D)"
+FROM (SELECT
+        t.TABLE_SCHEMA AS "DATABASE",
+        t.TABLE_NAME AS "TABLE",
+        FORMAT(t.TABLE_ROWS,0,'en_US') AS "ROWS",
+        FORMAT(t.AUTO_INCREMENT,0,'EN_US') AS "AUTO_INCREMENT",
+        t.CREATE_TIME AS "CREATE_TIME",
+        t.TABLE_COLLATION,
+        CASE
+            WHEN COUNT(p.TABLE_NAME) = 1 THEN "NO"
+            ELSE CONCAT('YES (',count(p.TABLE_NAME),' PARTITIONS)')
+        END AS "PARTITIONED",
+        TRUNCATE(SUM(p.data_length)/1024/1024/1024,2) AS DATA_LENGTH_GB,
+        TRUNCATE(SUM(p.index_length)/1024/1024/1024,2) AS INDEX_LENGTH_GB,
+        TRUNCATE(SUM(p.data_free)/1024/1024/1024,2) AS DATA_FREE_LENGTH_GB,
+        TRUNCATE(SUM(p.data_length+p.index_length+p.data_free)/1024/1024/1024,2) AS TOTAL_LENGTH_GB
+    FROM  INFORMATION_SCHEMA.TABLES t
+    INNER JOIN information_schema.partitions p ON 
+        p.TABLE_SCHEMA =   t.TABLE_SCHEMA AND
+        p.TABLE_NAME = t.TABLE_NAME
+    WHERE t.table_schema = @v_schema
+        AND t.table_name = @v_table
+    GROUP BY 1,2,3,4,5,6) alfa
+LEFT JOIN information_schema.TRIGGERS tr ON 
+    tr.EVENT_OBJECT_SCHEMA = alfa.DATABASE AND 
+    tr.EVENT_OBJECT_TABLE = alfa.TABLE\G;
