@@ -5,6 +5,6 @@ where engine = 'MyISAM'
       and table_type = 'BASE TABLE'
       and table_schema not in ('information_schema', 'sys',
                                'performance_schema','mysql')
-      and table_schema = 'tax_manager'
+      and table_schema = 'database'
 order by table_schema,
          table_name;
